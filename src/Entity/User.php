@@ -34,6 +34,11 @@ use Symfony\Component\Validator\Constraints as Assert;
             validationContext: ['groups' => ['Default', 'user:write']]
         ),
         new Patch(security: "is_granted('ROLE_ADMIN') or object == user"),
+        new Patch(
+            uriTemplate: '/users/{id}/roles',
+            security: "is_granted('ROLE_ADMIN')",
+            denormalizationContext: ['groups' => ['admin:write']],
+        ),
         new Delete(security: "is_granted('ROLE_ADMIN') or object == user"),
     ]
 )]
@@ -55,7 +60,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var list<string> The user roles
      */
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'admin:write'])]
     private array $roles = [];
 
     /**

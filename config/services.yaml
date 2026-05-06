@@ -23,9 +23,18 @@ services:
 
     # Extension API Platform : restreint automatiquement Order/OrderItem/Address
     # à l'utilisateur courant (sauf ROLE_ADMIN).
-    App\Doctrine\CurrentUserOrderExtension:
+    App\Doctrine\CurrentUserExtension:
         tags:
             - { name: api_platform.doctrine.orm.query_extension.collection }
+
+    # Décorateurs du PersistProcessor pour les State processors custom.
+    App\State\UserRegistrationProcessor:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.state.persist_processor'
+
+    App\State\AddressSetOwnerProcessor:
+        bind:
+            $decorated: '@api_platform.doctrine.orm.state.persist_processor'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
